@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import io.coffeelessprogrammer.tennisbooth.model.Brand;
+import io.coffeelessprogrammer.tennisbooth.model.TennisRacket;
+
 public class Inventory {
 
 	private List<TennisRacket> tennisRackets;
@@ -12,8 +15,8 @@ public class Inventory {
 		this.tennisRackets = new ArrayList<>();
 	}
 
-	public void addTennisRacket(String model, String brand, String serialNum, double price, float headSize,
-			float length, short strungWeight, boolean isHeadLight, byte balancePts, String frameComposition) {
+	public void addTennisRacket(String model, Brand brand, String serialNum, double price, float headSize, float length,
+			short strungWeight, Boolean isHeadLight, byte balancePts, String frameComposition) {
 
 		TennisRacket racket = new TennisRacket(model, brand, serialNum, price, headSize, length, strungWeight,
 				isHeadLight, balancePts, frameComposition);
@@ -26,37 +29,37 @@ public class Inventory {
 
 			TennisRacket racket = i.next();
 
-			if (racket.getSerialNumber().equals(serialNumber)) {
+			if (racket.getSerialNumber().equals(serialNumber))
 				return racket;
-			}
 		}
 		return null;
 	}
 
-	public TennisRacket searchFor(TennisRacket racketSearchCriteria) {
+	public List<TennisRacket> searchFor(TennisRacket racketSearchCriteria) {
+		List<TennisRacket> matchingRackets = new ArrayList<>();
+		
 		for (Iterator<TennisRacket> i = tennisRackets.iterator(); i.hasNext();) {
 			TennisRacket stockRacket = i.next();
 
 			// ---| Compare inventory rackets with search criteria
-			// ------| Ignore serial number and price
+			// ------| Ignore serial number
 
-			String searchBrand = racketSearchCriteria.getBrand();
-			if ((searchBrand != null) && (!searchBrand.isEmpty()) && (!searchBrand.equals(stockRacket.getBrand())))
+			Brand searchBrand = racketSearchCriteria.getBrand();
+			if (searchBrand != null && searchBrand != stockRacket.getBrand())
 				continue;
-//			System.out.println("---| Passed brand check:" + searchBrand + " = " + stockRacket.getBrand());
 
 			String searchModel = racketSearchCriteria.getModel();
-			if ((searchModel != null) && (!searchModel.isEmpty()) && (!searchModel.equals(stockRacket.getModel())))
+			if (searchModel != null && !searchModel.isEmpty()
+					&& !stockRacket.getModel().toLowerCase().contains(searchModel.toLowerCase()))
 				continue;
-//			System.out.println("---| Passed model check:" + searchModel + " = " + stockRacket.getModel());
 
-			boolean searchBalance = racketSearchCriteria.isHeadLight();
-			if (searchBalance != stockRacket.isHeadLight())
+			Boolean searchBalance = racketSearchCriteria.getIsHeadLight();
+			if (searchBalance != null && searchBalance != stockRacket.getIsHeadLight())
 				continue;
-//			System.out.println("---| Passed balance check");
 
-			return stockRacket;
+			matchingRackets.add(stockRacket);
 		}
-		return null;
+		
+		return matchingRackets;
 	}
 }
