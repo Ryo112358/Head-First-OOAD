@@ -6,6 +6,7 @@ import java.util.Iterator;
 
 import io.coffeelessprogrammer.tennisbooth.model.Brand;
 import io.coffeelessprogrammer.tennisbooth.model.TennisRacket;
+import io.coffeelessprogrammer.tennisbooth.model.TennisRacketSpec;
 
 public class Inventory {
 
@@ -15,11 +16,11 @@ public class Inventory {
 		this.tennisRackets = new ArrayList<>();
 	}
 
-	public void addTennisRacket(String model, Brand brand, String serialNum, double price, float headSize, float length,
+	public void addTennisRacket(String serialNum, double price, String model, Brand brand, float headSize, float length,
 			short strungWeight, Boolean isHeadLight, byte balancePts, String frameComposition) {
 
-		TennisRacket racket = new TennisRacket(model, brand, serialNum, price, headSize, length, strungWeight,
-				isHeadLight, balancePts, frameComposition);
+		TennisRacket racket = new TennisRacket(serialNum, price, new TennisRacketSpec(model, brand, headSize, length,
+				strungWeight, isHeadLight, balancePts, frameComposition));
 
 		this.tennisRackets.add(racket);
 	}
@@ -35,31 +36,33 @@ public class Inventory {
 		return null;
 	}
 
-	public List<TennisRacket> searchFor(TennisRacket racketSearchCriteria) {
+	public List<TennisRacket> searchFor(TennisRacketSpec racketSearchCriteria) {
 		List<TennisRacket> matchingRackets = new ArrayList<>();
-		
-		for (Iterator<TennisRacket> i = tennisRackets.iterator(); i.hasNext();) {
-			TennisRacket stockRacket = i.next();
 
+		for (Iterator<TennisRacket> i = tennisRackets.iterator(); i.hasNext();) {
+			
+			TennisRacket stockRacket = i.next();
+			TennisRacketSpec stockRacketSpec = stockRacket.getSpec();
+			
 			// ---| Compare inventory rackets with search criteria
 			// ------| Ignore serial number
 
 			Brand searchBrand = racketSearchCriteria.getBrand();
-			if (searchBrand != null && searchBrand != stockRacket.getBrand())
+			if (searchBrand != null && searchBrand != stockRacketSpec.getBrand())
 				continue;
 
 			String searchModel = racketSearchCriteria.getModel();
 			if (searchModel != null && !searchModel.isEmpty()
-					&& !stockRacket.getModel().toLowerCase().contains(searchModel.toLowerCase()))
+					&& !stockRacketSpec.getModel().toLowerCase().contains(searchModel.toLowerCase()))
 				continue;
 
 			Boolean searchBalance = racketSearchCriteria.getIsHeadLight();
-			if (searchBalance != null && searchBalance != stockRacket.getIsHeadLight())
+			if (searchBalance != null && searchBalance != stockRacketSpec.getIsHeadLight())
 				continue;
 
 			matchingRackets.add(stockRacket);
 		}
-		
+
 		return matchingRackets;
 	}
 }
