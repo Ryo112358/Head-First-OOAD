@@ -23,7 +23,7 @@ public class TennisBoothSimulator {
 
 	public static boolean matchRacketModel(String searchModel) {
 		TennisRacket sampleRacket = new TennisRacket("W01", 249.00, new TennisRacketSpec("Pro Staff RF97 v13",
-				Brand.WILSON, 625.81f, 68.58f, (short) 357, true, (byte) 9, "Graphite/Aramid"));
+				Brand.WILSON, 625.81f, 68.58f, (short) 357, true, (byte) 9, (byte) 16, (byte) 19, "Graphite/Aramid"));
 
 		return sampleRacket.getSpec().getModel().toLowerCase().contains(searchModel.toLowerCase());
 	}

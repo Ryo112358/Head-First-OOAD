@@ -17,10 +17,11 @@ public class Inventory {
 	}
 
 	public void addTennisRacket(String serialNum, double price, String model, Brand brand, float headSize, float length,
-			short strungWeight, Boolean isHeadLight, byte balancePts, String frameComposition) {
+			short strungWeight, Boolean isHeadLight, byte balancePts, byte mains, byte crosses,
+			String frameComposition) {
 
 		TennisRacket racket = new TennisRacket(serialNum, price, new TennisRacketSpec(model, brand, headSize, length,
-				strungWeight, isHeadLight, balancePts, frameComposition));
+				strungWeight, isHeadLight, balancePts, mains, crosses, frameComposition));
 
 		this.tennisRackets.add(racket);
 	}
@@ -40,27 +41,14 @@ public class Inventory {
 		List<TennisRacket> matchingRackets = new ArrayList<>();
 
 		for (Iterator<TennisRacket> i = tennisRackets.iterator(); i.hasNext();) {
-			
+
 			TennisRacket stockRacket = i.next();
 			TennisRacketSpec stockRacketSpec = stockRacket.getSpec();
-			
+
 			// ---| Compare inventory rackets with search criteria
-			// ------| Ignore serial number
 
-			Brand searchBrand = racketSearchCriteria.getBrand();
-			if (searchBrand != null && searchBrand != stockRacketSpec.getBrand())
-				continue;
-
-			String searchModel = racketSearchCriteria.getModel();
-			if (searchModel != null && !searchModel.isEmpty()
-					&& !stockRacketSpec.getModel().toLowerCase().contains(searchModel.toLowerCase()))
-				continue;
-
-			Boolean searchBalance = racketSearchCriteria.getIsHeadLight();
-			if (searchBalance != null && searchBalance != stockRacketSpec.getIsHeadLight())
-				continue;
-
-			matchingRackets.add(stockRacket);
+			if (stockRacketSpec.matches(racketSearchCriteria))
+				matchingRackets.add(stockRacket);
 		}
 
 		return matchingRackets;
