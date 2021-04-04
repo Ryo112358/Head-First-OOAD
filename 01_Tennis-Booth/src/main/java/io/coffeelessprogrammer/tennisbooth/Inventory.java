@@ -32,7 +32,7 @@ public class Inventory {
 
 			TennisRacket racket = i.next();
 
-			if (racket.getSerialNumber().equals(serialNumber))
+			if (racket.getSerialNumber().equalsIgnoreCase(serialNumber))
 				return racket;
 		}
 		return null;

@@ -1,6 +1,7 @@
 package io.coffeelessprogrammer.tennisbooth;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.Iterator;
 import java.util.List;
@@ -49,6 +50,23 @@ public final class FindTennisRacketTests {
 
 	// #region TennisRacketInventoryFilterTests
 
+	@DisplayName("Find Pro Staff RF97 By Serial")
+	@Test
+	final void SearchBySerialNumber_When_SerialForProStaff_Then_RacketFound() {
+		TennisRacket searchResult = inventory.getTennisRacket("w01");
+		
+		assertEquals("W01", searchResult.getSerialNumber());
+		assertEquals("Pro Staff RF97 v13", searchResult.getSpec().getModel());
+	}
+
+	@DisplayName("Find Nonexistent Serial Number")
+	@Test
+	final void SearchBySerialNumber_When_SerialDoesNotExist_Then_RacketNotFound() {
+		TennisRacket searchResult = inventory.getTennisRacket("W04");
+		
+		assertNull(searchResult, "Racket does not exist in inventory. It should not have been found!?!");
+	}
+
 	@DisplayName("Find Pro Staff RF97")
 	@Test
 	final void SearchByModel_When_MatchingModelCapitalization_Then_RacketFound() {
@@ -57,8 +75,8 @@ public final class FindTennisRacketTests {
 
 		List<TennisRacket> searchResult = inventory.searchFor(racketCriteria);
 
-		assertEquals(searchResult.size(), 1);
-		assertEquals(searchResult.get(0).getSpec().getModel(), "Pro Staff RF97 v13");
+		assertEquals(1, searchResult.size());
+		assertEquals("Pro Staff RF97 v13", searchResult.get(0).getSpec().getModel());
 	}
 
 	@DisplayName("Find Pro Staff RF97")
@@ -69,8 +87,8 @@ public final class FindTennisRacketTests {
 
 		List<TennisRacket> searchResult = inventory.searchFor(racketCriteria);
 
-		assertEquals(searchResult.size(), 1);
-		assertEquals(searchResult.get(0).getSpec().getModel(), "Pro Staff RF97 v13");
+		assertEquals(1, searchResult.size());
+		assertEquals("Pro Staff RF97 v13", searchResult.get(0).getSpec().getModel());
 	}
 
 	@DisplayName("Conflicting Model & Brand")
@@ -81,7 +99,7 @@ public final class FindTennisRacketTests {
 
 		List<TennisRacket> searchResult = inventory.searchFor(racketCriteria);
 
-		assertEquals(searchResult.size(), 0);
+		assertEquals(0, searchResult.size());
 	}
 
 	@DisplayName("Find All Rackets Containing 'Pure'")
@@ -92,11 +110,11 @@ public final class FindTennisRacketTests {
 
 		List<TennisRacket> searchResult = inventory.searchFor(racketCriteria);
 
-		assertEquals(searchResult.size(), 2);
+		assertEquals(2, searchResult.size());
 
 		for (Iterator<TennisRacket> i = searchResult.iterator(); i.hasNext();) {
 			TennisRacket racket = i.next();
-			assertEquals(racket.getSpec().getBrand(), Brand.BABOLAT);
+			assertEquals(Brand.BABOLAT, racket.getSpec().getBrand());
 		}
 	}
 
@@ -108,11 +126,11 @@ public final class FindTennisRacketTests {
 
 		List<TennisRacket> searchResult = inventory.searchFor(racketCriteria);
 
-		assertEquals(searchResult.size(), 3);
+		assertEquals(3, searchResult.size());
 
 		for (Iterator<TennisRacket> i = searchResult.iterator(); i.hasNext();) {
 			TennisRacket racket = i.next();
-			assertEquals(racket.getSpec().getBrand(), Brand.WILSON);
+			assertEquals(Brand.WILSON, racket.getSpec().getBrand());
 		}
 	}
 
@@ -124,11 +142,11 @@ public final class FindTennisRacketTests {
 
 		List<TennisRacket> searchResult = inventory.searchFor(racketCriteria);
 
-		assertEquals(searchResult.size(), 1);
+		assertEquals(1, searchResult.size());
 
 		for (Iterator<TennisRacket> i = searchResult.iterator(); i.hasNext();) {
 			TennisRacket racket = i.next();
-			assertEquals(racket.getSpec().getMains(), (byte) 18);
+			assertEquals((byte) 18, racket.getSpec().getMains());
 		}
 	}
 
@@ -140,11 +158,11 @@ public final class FindTennisRacketTests {
 
 		List<TennisRacket> searchResult = inventory.searchFor(racketCriteria);
 
-		assertEquals(searchResult.size(), 3);
+		assertEquals(3, searchResult.size());
 
 		for (Iterator<TennisRacket> i = searchResult.iterator(); i.hasNext();) {
 			TennisRacket racket = i.next();
-			assertEquals(racket.getSpec().getCrosses(), (byte) 20);
+			assertEquals((byte) 20, racket.getSpec().getCrosses());
 		}
 	}
 
@@ -156,12 +174,12 @@ public final class FindTennisRacketTests {
 
 		List<TennisRacket> searchResult = inventory.searchFor(racketCriteria);
 
-		assertEquals(searchResult.size(), 2);
+		assertEquals(2, searchResult.size());
 
 		for (Iterator<TennisRacket> i = searchResult.iterator(); i.hasNext();) {
 			TennisRacket racket = i.next();
-			assertEquals(racket.getSpec().getMains(), (byte) 16);
-			assertEquals(racket.getSpec().getCrosses(), (byte) 20);
+			assertEquals((byte) 16, racket.getSpec().getMains());
+			assertEquals((byte) 20, racket.getSpec().getCrosses());
 		}
 	}
 
@@ -175,11 +193,11 @@ public final class FindTennisRacketTests {
 
 		List<TennisRacket> searchResult = inventory.searchFor(racketCriteria);
 
-		assertEquals(searchResult.size(), 4);
+		assertEquals(4, searchResult.size());
 
 		for (Iterator<TennisRacket> i = searchResult.iterator(); i.hasNext();) {
 			TennisRacket racket = i.next();
-			assertEquals(RangeValidator.isValueInRange(racket.getPriceUSD(), priceRange), true);
+			assertEquals(true, RangeValidator.isValueInRange(racket.getPriceUSD(), priceRange));
 		}
 	}
 
@@ -193,11 +211,11 @@ public final class FindTennisRacketTests {
 
 		List<TennisRacket> searchResult = inventory.searchFor(racketCriteria);
 
-		assertEquals(searchResult.size(), 3);
+		assertEquals(3, searchResult.size());
 
 		for (Iterator<TennisRacket> i = searchResult.iterator(); i.hasNext();) {
 			TennisRacket racket = i.next();
-			assertEquals(RangeValidator.isValueInRange(racket.getPriceUSD(), priceRange), true);
+			assertEquals(true, RangeValidator.isValueInRange(racket.getPriceUSD(), priceRange));
 		}
 	}
 
@@ -211,11 +229,11 @@ public final class FindTennisRacketTests {
 
 		List<TennisRacket> searchResult = inventory.searchFor(racketCriteria);
 
-		assertEquals(searchResult.size(), 3);
+		assertEquals(3, searchResult.size());
 
 		for (Iterator<TennisRacket> i = searchResult.iterator(); i.hasNext();) {
 			TennisRacket racket = i.next();
-			assertEquals(RangeValidator.isValueInRange(racket.getPriceUSD(), priceRange), true);
+			assertEquals(true, RangeValidator.isValueInRange(racket.getPriceUSD(), priceRange));
 		}
 	}
 
@@ -229,11 +247,11 @@ public final class FindTennisRacketTests {
 
 		List<TennisRacket> searchResult = inventory.searchFor(racketCriteria);
 
-		assertEquals(searchResult.size(), 4);
+		assertEquals(4, searchResult.size());
 
 		for (Iterator<TennisRacket> i = searchResult.iterator(); i.hasNext();) {
 			TennisRacket racket = i.next();
-			assertEquals(RangeValidator.isValueInRange(racket.getPriceUSD(), priceRange), true);
+			assertEquals(true, RangeValidator.isValueInRange(racket.getPriceUSD(), priceRange));
 		}
 	}
 
@@ -247,11 +265,11 @@ public final class FindTennisRacketTests {
 
 		List<TennisRacket> searchResult = inventory.searchFor(racketCriteria);
 
-		assertEquals(searchResult.size(), 4);
+		assertEquals(4, searchResult.size());
 
 		for (Iterator<TennisRacket> i = searchResult.iterator(); i.hasNext();) {
 			TennisRacket racket = i.next();
-			assertEquals(RangeValidator.isValueInRange(racket.getSpec().getHeadSizeCmSq(), headSizeRange), true);
+			assertEquals(true, RangeValidator.isValueInRange(racket.getSpec().getHeadSizeCmSq(), headSizeRange));
 		}
 	}
 
@@ -265,11 +283,11 @@ public final class FindTennisRacketTests {
 
 		List<TennisRacket> searchResult = inventory.searchFor(racketCriteria);
 
-		assertEquals(searchResult.size(), 6);
+		assertEquals(6, searchResult.size());
 
 		for (Iterator<TennisRacket> i = searchResult.iterator(); i.hasNext();) {
 			TennisRacket racket = i.next();
-			assertEquals(RangeValidator.isValueInRange(racket.getSpec().getLengthCm(), racketLengthRange), true);
+			assertEquals(true, RangeValidator.isValueInRange(racket.getSpec().getLengthCm(), racketLengthRange));
 		}
 	}
 
@@ -283,11 +301,11 @@ public final class FindTennisRacketTests {
 
 		List<TennisRacket> searchResult = inventory.searchFor(racketCriteria);
 
-		assertEquals(searchResult.size(), 5);
+		assertEquals(5, searchResult.size());
 
 		for (Iterator<TennisRacket> i = searchResult.iterator(); i.hasNext();) {
 			TennisRacket racket = i.next();
-			assertEquals(RangeValidator.isValueInRange(racket.getSpec().getStrungWeightGrams(), strungWeightRange), true);
+			assertEquals(true, RangeValidator.isValueInRange(racket.getSpec().getStrungWeightGrams(), strungWeightRange));
 		}
 	}
 
@@ -299,11 +317,11 @@ public final class FindTennisRacketTests {
 
 		List<TennisRacket> searchResult = inventory.searchFor(racketCriteria);
 
-		assertEquals(searchResult.size(), 4);
+		assertEquals(4, searchResult.size());
 
 		for (Iterator<TennisRacket> i = searchResult.iterator(); i.hasNext();) {
 			TennisRacket racket = i.next();
-			assertEquals(racket.getSpec().isHeadLight(), true);
+			assertEquals(true, racket.getSpec().isHeadLight());
 		}
 	}
 
@@ -317,11 +335,11 @@ public final class FindTennisRacketTests {
 
 		List<TennisRacket> searchResult = inventory.searchFor(racketCriteria);
 
-		assertEquals(searchResult.size(), 2);
+		assertEquals(2, searchResult.size());
 
 		for (Iterator<TennisRacket> i = searchResult.iterator(); i.hasNext();) {
 			TennisRacket racket = i.next();
-			assertEquals(RangeValidator.isValueInRange(racket.getSpec().getBalancePoints(), balancePtsRange), true);
+			assertEquals(true, RangeValidator.isValueInRange(racket.getSpec().getBalancePoints(), balancePtsRange));
 		}
 	}
 
@@ -335,11 +353,11 @@ public final class FindTennisRacketTests {
 
 		List<TennisRacket> searchResult = inventory.searchFor(racketCriteria);
 
-		assertEquals(searchResult.size(), 3);
+		assertEquals(3, searchResult.size());
 
 		for (Iterator<TennisRacket> i = searchResult.iterator(); i.hasNext();) {
 			TennisRacket racket = i.next();
-			assertEquals(RangeValidator.isValueInRange(racket.getSpec().getBalancePoints(), balancePtsRange), true);
+			assertEquals(true, RangeValidator.isValueInRange(racket.getSpec().getBalancePoints(), balancePtsRange));
 		}
 	}
 
