@@ -1,6 +1,6 @@
 package io.coffeelessprogrammer.tennisbooth.utility;
 
-public class RangeValidator {
+public final class RangeValidator {
 	
 	public static final boolean isValueInRange(long value, long[] range) {
 		if (range != null) {
