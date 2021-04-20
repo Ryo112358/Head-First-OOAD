@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 
-public class RangeValidatorTests {
+final class RangeValidatorTests {
 	
 	private static final byte[] byteRange = {1, 8};
 	private static final float[] floatRange = {34.57f, 82.12f};

@@ -18,7 +18,7 @@ import io.coffeelessprogrammer.tennisbooth.model.TennisRacketFilterCriteria;
 import io.coffeelessprogrammer.tennisbooth.utility.RangeValidator;
 
 
-public final class FindTennisRacketTests {
+final class FindTennisRacketTests {
 
 	private static final Inventory inventory = new Inventory();
 
@@ -49,6 +49,7 @@ public final class FindTennisRacketTests {
 		inventory.addTennisRacket("H01", 189.00, "Graphene 360+ Instinct PWR", Brand.HEAD, (byte) 16, (byte) 19,
 				741.93f, 70.36f, (short) 244, false, (byte) 9, "Graphite/Graphene 360+");
 	}
+	
 
 	// #region TennisRacketInventoryFilterTests
 
@@ -106,7 +107,7 @@ public final class FindTennisRacketTests {
 
 	@DisplayName("Find All Rackets Containing 'Pure'")
 	@Test
-	final void SearchByModel_When_ModelContainsPure_Then_ReturnPureBabolatRackets() {
+	final void SearchByModel_When_ModelContainsPure_Then_ReturnBabolatPureRackets() {
 		TennisRacketFilterCriteria racketCriteria = new TennisRacketFilterCriteria("pure", null, null, (byte) 0,
 				(byte) 0, null, null, null, null, null);
 
@@ -138,7 +139,7 @@ public final class FindTennisRacketTests {
 
 	@DisplayName("Find All Rackets w/ 18 Mains")
 	@Test
-	final void SearchByStringPattern_When_Criteria18Mains_Then_Return18MainRackets() {
+	final void SearchByStringPattern_When_Criteria18Mains_Then_ReturnRacketsWith18Mains() {
 		TennisRacketFilterCriteria racketCriteria = new TennisRacketFilterCriteria(null, null, null, (byte) 18,
 				(byte) 0, null, null, null, null, null);
 
@@ -154,7 +155,7 @@ public final class FindTennisRacketTests {
 
 	@DisplayName("Find All Rackets w/ 20 Crosses")
 	@Test
-	final void SearchByStringPattern_When_Criteria20Crosses_Then_Return20CrossRackets() {
+	final void SearchByStringPattern_When_Criteria20Crosses_Then_ReturnRacketsWith20Crosses() {
 		TennisRacketFilterCriteria racketCriteria = new TennisRacketFilterCriteria(null, null, null, (byte) 0,
 				(byte) 20, null, null, null, null, null);
 
@@ -170,7 +171,7 @@ public final class FindTennisRacketTests {
 
 	@DisplayName("Find All Rackets w/ 16x20 String Pattern")
 	@Test
-	final void SearchByStringPattern_When_CriteriaMains16Crosses20_Then_Return16x20Rackets() {
+	final void SearchByStringPattern_When_Criteria16Mains20Crosses_Then_Return16x20Rackets() {
 		TennisRacketFilterCriteria racketCriteria = new TennisRacketFilterCriteria(null, null, null, (byte) 16,
 				(byte) 20, null, null, null, null, null);
 

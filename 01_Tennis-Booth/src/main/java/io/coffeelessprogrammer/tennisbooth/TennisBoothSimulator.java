@@ -1,31 +1,71 @@
 package io.coffeelessprogrammer.tennisbooth;
 
-import io.coffeelessprogrammer.tennisbooth.model.Brand;
-import io.coffeelessprogrammer.tennisbooth.model.TennisRacket;
-import io.coffeelessprogrammer.tennisbooth.model.TennisRacketSpec;
+import java.util.Random;
+import java.util.stream.LongStream;
 
 public class TennisBoothSimulator {
 
 	public static void main(String[] args) {
-
-		System.out.println("Compare Enum Result: " + compareEnums());
-
-		System.out.println("Match Racket Model: " + matchRacketModel("pro staff"));
-		System.out.println("Match Racket Model: " + matchRacketModel("Rf97"));
-		System.out.println("Match Racket Model: " + matchRacketModel("aramid"));
-		System.out.println("Match Racket Model: " + matchRacketModel("Pro Staff RF97 v13"));
-
+		
+		genRandomPhoneNumOfLength(6);
+		genRandomPhoneNumOfLength(8);
+		genRandomPhoneNumOfLength(9);
+		genRandomPhoneNumOfLength(10);
+		genRandomPhoneNumOfLength(11);
+		genRandomPhoneNumOfLength(12);
+		genRandomPhoneNumOfLength(13);
+		genRandomPhoneNumOfLength(14);
+		genRandomPhoneNumOfLength(18);
 	}
-
-	public static boolean compareEnums() {
-		return Brand.BABOLAT == Brand.WILSON;
+	
+	public static String genRandomPhoneNumOfLength(int length) {
+		if (length < 1 || length > 18) return null;
+		
+		String phoneNumber;
+		
+		Random rand = new Random(System.currentTimeMillis());
+		
+		long lowerBound = (long) Math.pow(10L, length-1);
+		long upperBound = genMaxValueOfNDigits(length);
+		
+		try(LongStream longStream = rand.longs(lowerBound, upperBound+1).limit(1)) {
+			
+			long phoneNum = longStream.findFirst().getAsLong();
+			
+			if (length == 9) {
+				phoneNumber = ((Long) phoneNum).toString().replaceAll("^(\\d{3})(\\d{3})(\\d{3})$", "$1-$2-$3");
+			}
+			else if (length == 10) {
+				phoneNumber = ((Long) phoneNum).toString().replaceAll("^(\\d{3})(\\d{3})(\\d{4})$", "$1-$2-$3");
+			}
+			else if (length == 11) {
+				phoneNumber = ((Long) phoneNum).toString().replaceAll("^(\\d{3})(\\d{4})(\\d{4})$", "$1-$2-$3");
+			}
+			else if (length == 12) {
+				phoneNumber = ((Long) phoneNum).toString().replaceAll("^(\\d{4})(\\d{4})(\\d{4})$", "$1-$2-$3");
+			}
+			else if (length == 13) {
+				phoneNumber = ((Long) phoneNum).toString().replaceAll("^(\\d{3})(\\d{3})(\\d{3})(\\d{4})$", "$1-$2-$3-$4");
+			}
+			else {
+				phoneNumber = ((Long) phoneNum).toString();
+			}
+		
+			System.out.println(phoneNum + " — " + phoneNumber);
+		}
+		
+		return phoneNumber;
 	}
-
-	public static boolean matchRacketModel(String searchModel) {
-		TennisRacket sampleRacket = new TennisRacket("W01", 249.00, new TennisRacketSpec("Pro Staff RF97 v13",
-				Brand.WILSON, (byte) 16, (byte) 19, 625.81f, 68.58f, (short) 357, true, (byte) 9, "Graphite/Aramid"));
-
-		return sampleRacket.getSpec().getModel().toLowerCase().contains(searchModel.toLowerCase());
+	
+	public static long genMaxValueOfNDigits(int numDigits) {
+		if (numDigits < 1 || numDigits > 18) return 0;
+		
+		long max = 9L;
+		
+		for (int i=1; i < numDigits; ++i) {
+			max = max * 10 + 9;
+		}
+		
+		return max;
 	}
-
 }
