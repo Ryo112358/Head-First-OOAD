@@ -37,7 +37,7 @@ public final class PhoneNumberGenerator {
 		Random rand = new Random(System.currentTimeMillis());
 		
 		long lowerBound = (long) Math.pow(10L, length-1);
-		long upperBound = genMaxValueOfNDigits(length) + 1;
+		long upperBound =  (long) Math.pow(10L, length);
 		
 		try(LongStream longStream = rand.longs(1, lowerBound, upperBound)) {
 			
@@ -77,8 +77,31 @@ public final class PhoneNumberGenerator {
 		return randNumber;
 	}
 	
+	public static String generateRandNumberOfLength(int totalLength, String numericalPrefix) {
+		if (totalLength < 5 || totalLength > 18) return null;
+		try {
+			Integer.decode(numericalPrefix);
+		} catch (NumberFormatException nfe) { return null; }
+		
+		long randNumber;
+		
+		Random rand = new Random(System.currentTimeMillis());
+		
+		long lowerBound, upperBound;
+		
+		lowerBound = (long) Math.pow(10L, totalLength-numericalPrefix.length()-1);
+		upperBound = (long) Math.pow(10L, totalLength-numericalPrefix.length());
+		
+		try(LongStream longStream = rand.longs(1, lowerBound, upperBound)) {
+			randNumber = longStream.findFirst().getAsLong();
+		}
+		
+		return numericalPrefix + randNumber;
+	}
+	
 	// #region Helpers
 	
+	@SuppressWarnings("unused")
 	private static long genMaxValueOfNDigits(int numDigits) {
 		if (numDigits < 1 || numDigits > 18) return 0;
 		
