@@ -5,9 +5,13 @@ import java.util.stream.LongStream;
 
 import io.coffeelessprogrammer.tennisbooth.constants.CountryCodeISO;
 
-public final class PhoneNumberGenerator {
+public final class RandomPhoneNumberGenerator {
 	
-	public static String genRandPhoneNumberForCountry(CountryCodeISO country) {
+	public static String generate(int length) {
+		return formatAsPhoneNumber(generateRandNumberOfLength(length));
+	}
+	
+	public static String generate(CountryCodeISO country) {
 		String phoneNumber;
 		
 		switch(country) {
@@ -25,12 +29,8 @@ public final class PhoneNumberGenerator {
 		return phoneNumber;
 	}
 	
-	public static String genRandPhoneNumber(int length) {
-		return formatAsPhoneNumber(generateRandNumberOfLength(length));
-	}
-	
-	public static long generateRandNumberOfLength(int length) {
-		if (length < 5 || length > 18) return 0L;
+	public static String generateRandNumberOfLength(int length) {
+		if (length < 5 || length > 18) return null;
 		
 		long randNumber;
 		
@@ -44,12 +44,12 @@ public final class PhoneNumberGenerator {
 			randNumber = longStream.findFirst().getAsLong();
 		}
 		
-		return randNumber;
+		return ((Long) randNumber).toString();
 	}
 	
-	public static long generateRandNumberOfLength(int length, int firstDigit) {
-		if (length < 5 || length > 18) return 0L;
-		if (firstDigit < 0 || firstDigit > 9) return 0L;
+	public static String generateRandNumberOfLength(int length, int firstDigit) {
+		if (length < 5 || length > 18) return null;
+		if (firstDigit < 0 || firstDigit > 9) return null;
 		
 		long randNumber;
 		
@@ -74,7 +74,10 @@ public final class PhoneNumberGenerator {
 			randNumber = longStream.findFirst().getAsLong();
 		}
 		
-		return randNumber;
+		if (firstDigit == 0)
+			return "0" + ((Long) randNumber).toString();
+		
+		return ((Long) randNumber).toString();
 	}
 	
 	public static String generateRandNumberOfLength(int totalLength, String numericalPrefix) {
@@ -101,48 +104,35 @@ public final class PhoneNumberGenerator {
 	
 	// #region Helpers
 	
-	@SuppressWarnings("unused")
-	private static long genMaxValueOfNDigits(int numDigits) {
-		if (numDigits < 1 || numDigits > 18) return 0;
+	private static String formatAsPhoneNumber(String number) {
 		
-		long max = 9L;
-		
-		for (int i=1; i < numDigits; ++i) {
-			max = max * 10 + 9;
-		}
-		
-		return max;
-	}
-	
-	private static String formatAsPhoneNumber(long number) {
-		
-		int digitCount = Long.toString(number).length();
+		int digitCount = number.length();
 		
 		String phoneNumber;
 		
 		if (digitCount == 7) {
-			phoneNumber = ((Long) number).toString().replaceAll("^(\\d{3})(\\d{4})$", "$1-$2");
+			phoneNumber = number.replaceAll("^(\\d{3})(\\d{4})$", "$1-$2");
 		}
 		else if (digitCount == 8) {
-			phoneNumber = ((Long) number).toString().replaceAll("(\\d{4})(\\d{4})$", "$1-$2");
+			phoneNumber = number.replaceAll("(\\d{4})(\\d{4})$", "$1-$2");
 		}
 		else if (digitCount == 9) {
-			phoneNumber = ((Long) number).toString().replaceAll("^(\\d{3})(\\d{3})(\\d{3})$", "$1-$2-$3");
+			phoneNumber = number.replaceAll("^(\\d{3})(\\d{3})(\\d{3})$", "$1-$2-$3");
 		}
 		else if (digitCount == 10) {
-			phoneNumber = ((Long) number).toString().replaceAll("^(\\d{3})(\\d{3})(\\d{4})$", "$1-$2-$3");
+			phoneNumber = number.replaceAll("^(\\d{3})(\\d{3})(\\d{4})$", "$1-$2-$3");
 		}
 		else if (digitCount == 11) {
-			phoneNumber = ((Long) number).toString().replaceAll("^(\\d{3})(\\d{4})(\\d{4})$", "$1-$2-$3");
+			phoneNumber = number.replaceAll("^(\\d{3})(\\d{4})(\\d{4})$", "$1-$2-$3");
 		}
 		else if (digitCount == 12) {
-			phoneNumber = ((Long) number).toString().replaceAll("^(\\d{4})(\\d{4})(\\d{4})$", "$1-$2-$3");
+			phoneNumber = number.replaceAll("^(\\d{4})(\\d{4})(\\d{4})$", "$1-$2-$3");
 		}
 		else if (digitCount == 13) {
-			phoneNumber = ((Long) number).toString().replaceAll("^(\\d{3})(\\d{3})(\\d{3})(\\d{4})$", "$1-$2-$3-$4");
+			phoneNumber = number.replaceAll("^(\\d{3})(\\d{3})(\\d{3})(\\d{4})$", "$1-$2-$3-$4");
 		}
 		else {
-			phoneNumber = ((Long) number).toString();
+			phoneNumber = number;
 		}
 	
 		// System.out.println(number + " — " + phoneNumber);
@@ -156,41 +146,38 @@ public final class PhoneNumberGenerator {
 	
 	public static String genChinaPhoneNumber(boolean includeCountryCallingCode, boolean isBeijingNumber) {
 		String phoneNumber;
-		long randNum;
+		String randNum;
 		
 		if (isBeijingNumber) {
 			randNum = generateRandNumberOfLength(11, 0);
-			phoneNumber = Long.toString(randNum).replaceAll("^(\\d{2})(\\d{4})(\\d{4})$", "0$1-$2-$3");
 		} else {
 			randNum = generateRandNumberOfLength(11);
-			phoneNumber = ((Long) randNum).toString().replaceAll("^(\\d{3})(\\d{4})(\\d{4})$", "$1-$2-$3");
 		}
 		
-		if (includeCountryCallingCode) {
+		phoneNumber = randNum.toString().replaceAll("^(\\d{3})(\\d{4})(\\d{4})$", "$1-$2-$3");
+		
+		if (includeCountryCallingCode)
 			return "+86 " + phoneNumber;
-		}
 		
 		return phoneNumber;
 	}
 	
 	public static String genEstoniaPhoneNumber(boolean includeCountryCallingCode) {
-		long randNum = generateRandNumberOfLength(8, 5);
-		String phoneNumber = ((Long) randNum).toString().replaceAll("^(\\d{4})(\\d{4})$", "$1-$2");
+		String randNum = generateRandNumberOfLength(8, 5);
+		String phoneNumber = randNum.replaceAll("^(\\d{4})(\\d{4})$", "$1-$2");
 		
-		if (includeCountryCallingCode) {
+		if (includeCountryCallingCode)
 			return "+372 " + phoneNumber;
-		}
 		
 		return phoneNumber;
 	}
 	
 	public static String genUnitedStatesPhoneNumber(boolean includeCountryCallingCode) {
-		long randNum = generateRandNumberOfLength(10);
-		String phoneNumber = ((Long) randNum).toString().replaceAll("^(\\d{3})(\\d{3})(\\d{4})$", "$1-$2-$3");
+		String randNum = generateRandNumberOfLength(10);
+		String phoneNumber = randNum.replaceAll("^(\\d{3})(\\d{3})(\\d{4})$", "$1-$2-$3");
 		
-		if (includeCountryCallingCode) {
+		if (includeCountryCallingCode)
 			return "+1 " + phoneNumber;
-		}
 		
 		return phoneNumber;
 	}
